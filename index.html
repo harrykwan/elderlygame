@@ -22,6 +22,7 @@
       return today
     }
 
+
     var myweathericonurl
 
     function reqListener() {
@@ -166,6 +167,9 @@
         imageMode(CENTER);
         image(game3img2[game3step], boardwidth / 2, boardheight / 4 * 3);
         game3img2[game3step].resize(0, boardheight / 2)
+
+
+        circle(boardwidth / 2, boardheight / 2, 200);
       }
 
     }
@@ -214,6 +218,8 @@
     }
 
     function mousePressed(event) {
+      if (!event.screenX || !event.screenY)
+        return
       console.log(event.screenX, event.screenY);
       if (nowscene == 'game1') {
 
@@ -222,6 +228,7 @@
       } else if (nowscene == 'game3') {
         console.log(event.screenX - boardwidth / 2)
         console.log(event.screenY - boardheight / 2)
+
       }
     }
   </script>
