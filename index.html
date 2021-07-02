@@ -1,79 +1,234 @@
 <html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
-    <style>
-      body {
-        padding: 0;
-        margin: 0;
-        background: black;
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      background: black;
+    }
+  </style>
+
+
+  <script>
+    function getfulldate() {
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = today.getFullYear();
+
+      today = yyyy + '/' + mm + '/' + dd;
+      return today
+    }
+
+    var myweathericonurl
+
+    function reqListener() {
+      var myresult = JSON.parse(this.responseText)
+      // console.log(myresult.icon);
+      myweathericonurl = myresult.icon[0]
+    }
+
+    function getweather() {
+      var oReq = new XMLHttpRequest();
+      oReq.addEventListener("load", reqListener);
+      oReq.open("GET", "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc");
+      oReq.send();
+    }
+
+    getweather()
+  </script>
+
+  <script>
+    var menubg;
+    const boardwidth = window.innerWidth;
+    const boardheight = window.innerHeight;
+    var menubutton1, menubutton2, menubutton3, weathericon
+
+    var game3step, game3img1 = [],
+      game3img2 = []
+
+
+    var nowscene = 'menu'
+
+    function setup() {
+      //menuimg
+      menubg = loadImage("./assets/menu/bg.png");
+
+
+      for (var j = 1; j <= 9; j++) {
+        game3img1[j] = loadImage("./assets/finddifferent/" + j + '.jpg')
+        game3img2[j] = loadImage("./assets/finddifferent/" + j + '.1.jpg')
       }
-    </style>
-    <script>
-      var menubg;
-      const boardwidth = window.innerWidth;
-      const boardheight = window.innerHeight;
-      function setup() {
-        // The background image must be the same size as the parameters
-        // into the createCanvas() method. In this program, the size of
-        // the image is 720x400 pixels.
-        menubg = loadImage("./assets/menu/bg.png");
 
-        createCanvas(boardwidth, boardheight);
+      createCanvas(boardwidth, boardheight);
+    }
+
+    function drawmenu() {
+
+      var topbarheight = 400;
+      var menubuttonwidth = 700;
+      var menubuttonheight = 300;
+
+
+      if (boardwidth > 500) {
+        topbarheight = 200;
+        menubuttonwidth = 600;
+        menubuttonheight = 200;
+      }
+      background(menubg);
+
+      //button1
+      menubutton1 = createImg("./assets/menu/matching.png");
+      menubutton1.position(
+        boardwidth / 2 - menubuttonwidth / 2,
+        (boardheight / 4) * 1 - menubuttonheight / 2 + topbarheight
+      );
+      menubutton1.size(menubuttonwidth, menubuttonheight);
+      menubutton1.mousePressed(changescene_matching);
+
+      //button2
+      menubutton2 = createImg("./assets/menu/music.png");
+      menubutton2.position(
+        boardwidth / 2 - menubuttonwidth / 2,
+        (boardheight / 5) * 2 - menubuttonheight / 2 + topbarheight
+      );
+      menubutton2.size(menubuttonwidth + 70, menubuttonheight + 70);
+      menubutton2.mousePressed(changescene_music);
+
+      //button3
+      menubutton3 = createImg("./assets/menu/finddifferent.png");
+      menubutton3.position(
+        boardwidth / 2 - menubuttonwidth / 2,
+        (boardheight / 5) * 3 - menubuttonheight / 2 + topbarheight + 70
+      );
+      menubutton3.size(menubuttonwidth, menubuttonheight);
+      menubutton3.mousePressed(changescene_finddifferent);
+
+      //sperate line
+      strokeWeight(20);
+      stroke(51);
+      rect(0, boardheight / 5, boardwidth, 0);
+
+      //top bar date
+      fill(0).strokeWeight(5);
+      textSize(100);
+      textAlign(LEFT, CENTER);
+      text(getfulldate(), 60, 150);
+
+      //weather icon
+      weathericon = createImg("https://www.hko.gov.hk/images/HKOWxIconOutline/pic" + myweathericonurl + ".png");
+      weathericon.position(
+        boardwidth - 250,
+        80
+      );
+      weathericon.size(150, 150);
+    }
+
+    function drawgame1() {
+
+
+    }
+
+    function drawgame2() {
+
+
+    }
+
+
+    function drawgame3() {
+
+
+      background(color(242, 232, 203))
+
+
+      if (game3step == 0) {
+        //game instruction
+        // const instructionwords = `遊戲玩法
+        // 考考你眼力！
+        // 圈出2幅圖的不同之處`
+        // fill(0).strokeWeight(5);
+        // textSize(100);
+        // textAlign(LEFT, CENTER);
+        // text(instructionwords, 60, 150);
+        game3step++
+      } else {
+        // game3img1 = createImg("./assets/finddifferent/" + game3step + '.jpg');
+        // game3img1.position(
+        //   0,
+        //   0
+        // );
+        // game3img1.size(boardwidth, boardheight / 2);
+        imageMode(CENTER);
+        image(game3img1[game3step], boardwidth / 2, boardheight / 4);
+        game3img1[game3step].resize(0, boardheight / 2)
+        imageMode(CENTER);
+        image(game3img2[game3step], boardwidth / 2, boardheight / 4 * 3);
+        game3img2[game3step].resize(0, boardheight / 2)
       }
 
-      function drawmenu() {
-        var topbarheight = 400;
-        var menubuttonwidth = 700;
-        var menubuttonheight = 300;
-        if (boardwidth > 500) {
-          topbarheight = 200;
-          menubuttonwidth = 600;
-          menubuttonheight = 200;
-        }
-        background(menubg);
+    }
 
-        //button1
-        var menubutton1 = createImg("./assets/menu/matching.png");
-        menubutton1.position(
-          boardwidth / 2 - menubuttonwidth / 2,
-          (boardheight / 4) * 1 - menubuttonheight / 2 + topbarheight
-        );
-        menubutton1.size(menubuttonwidth, menubuttonheight);
-        menubutton1.mousePressed(changescene_matching);
-
-        //button2
-        var menubutton2 = createImg("./assets/menu/music.png");
-        menubutton2.position(
-          boardwidth / 2 - menubuttonwidth / 2,
-          (boardheight / 5) * 2 - menubuttonheight / 2 + topbarheight
-        );
-        menubutton2.size(menubuttonwidth + 70, menubuttonheight + 70);
-        menubutton2.mousePressed(changescene_music);
-
-        //button2
-        var menubutton3 = createImg("./assets/menu/finddifferent.png");
-        menubutton3.position(
-          boardwidth / 2 - menubuttonwidth / 2,
-          (boardheight / 5) * 3 - menubuttonheight / 2 + topbarheight + 70
-        );
-        menubutton3.size(menubuttonwidth, menubuttonheight);
-        menubutton3.mousePressed(changescene_finddifferent);
-      }
-
-      function draw() {
+    function draw() {
+      clearmenuscenebutton()
+      clear()
+      if (nowscene == 'menu')
         drawmenu();
+      else if (nowscene == 'game1')
+        drawgame1()
+      else if (nowscene == 'game2')
+        drawgame2()
+      else if (nowscene == 'game3')
+        drawgame3()
+
+
+    }
+
+    function clearmenuscenebutton() {
+      if (menubutton1)
+        menubutton1.remove()
+      if (menubutton2)
+        menubutton2.remove()
+      if (menubutton3)
+        menubutton3.remove()
+      if (weathericon)
+        weathericon.remove()
+    }
+
+
+    function changescene_matching() {
+      console.log("game 1");
+      nowscene = 'game1'
+    }
+
+    function changescene_music() {
+      console.log("game 2");
+      nowscene = 'game2'
+    }
+
+    function changescene_finddifferent() {
+      console.log("game 3");
+      nowscene = 'game3'
+      game3step = 0;
+    }
+
+    function mousePressed(event) {
+      console.log(event.screenX, event.screenY);
+      if (nowscene == 'game1') {
+
+      } else if (nowscene == 'game2') {
+
+      } else if (nowscene == 'game3') {
+        console.log(event.screenX - boardwidth / 2)
+        console.log(event.screenY - boardheight / 2)
       }
+    }
+  </script>
+</head>
 
-      function changescene_matching() {
-        console.log("hi");
-      }
+<body>
+  <main></main>
+</body>
 
-      function changescene_music() {}
-
-      function changescene_finddifferent() {}
-    </script>
-  </head>
-  <body>
-    <main></main>
-  </body>
 </html>
