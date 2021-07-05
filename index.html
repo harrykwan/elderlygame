@@ -48,8 +48,80 @@
     var menubutton1, menubutton2, menubutton3, weathericon
 
     var game3step, game3img1 = [],
-      game3img2 = []
+      game3img2 = [],
+      game3showans = false,
+      game3ans = []
+    var game1bg = [],
+      game1img = [],
+      game1step
 
+
+    function game3ansinit() {
+      game3ans.push({
+        img1x: boardwidth / 2 - 50,
+        img1y: boardheight / 4 + 50,
+        img2x: boardwidth / 2 - 50,
+        img2y: boardheight / 4 * 3 + 50,
+        size: 300
+      })
+      game3ans.push({
+        img1x: boardwidth / 2,
+        img1y: boardheight / 4 + 200,
+        img2x: boardwidth / 2,
+        img2y: boardheight / 4 * 3 + 200,
+        size: 300
+      })
+      game3ans.push({
+        img1x: boardwidth / 2 + 200,
+        img1y: boardheight / 4 + 200,
+        img2x: boardwidth / 2 + 200,
+        img2y: boardheight / 4 * 3 + 200,
+        size: 800
+      })
+      game3ans.push({
+        img1x: boardwidth / 2 + 200,
+        img1y: boardheight / 4 - 200,
+        img2x: boardwidth / 2 + 200,
+        img2y: boardheight / 4 * 3 - 200,
+        size: 400
+      })
+      game3ans.push({
+        img1x: boardwidth / 2 + 250,
+        img1y: boardheight / 4 - 200,
+        img2x: boardwidth / 2 + 250,
+        img2y: boardheight / 4 * 3 - 200,
+        size: 600
+      })
+      game3ans.push({
+        img1x: boardwidth / 2 + 50,
+        img1y: boardheight / 4 + 50,
+        img2x: boardwidth / 2 + 50,
+        img2y: boardheight / 4 * 3 + 50,
+        size: 600
+      })
+      game3ans.push({
+        img1x: boardwidth / 2 + 50,
+        img1y: boardheight / 4 + 50,
+        img2x: boardwidth / 2 + 50,
+        img2y: boardheight / 4 * 3 + 50,
+        size: 600
+      })
+      game3ans.push({
+        img1x: boardwidth / 2 + 100,
+        img1y: boardheight / 4,
+        img2x: boardwidth / 2 + 100,
+        img2y: boardheight / 4 * 3,
+        size: 300
+      })
+      game3ans.push({
+        img1x: boardwidth / 2,
+        img1y: boardheight / 4 - 50,
+        img2x: boardwidth / 2,
+        img2y: boardheight / 4 * 3 - 50,
+        size: 400
+      })
+    }
+    game3ansinit()
 
     var nowscene = 'menu'
 
@@ -62,6 +134,14 @@
         game3img1[j] = loadImage("./assets/finddifferent/" + j + '.jpg')
         game3img2[j] = loadImage("./assets/finddifferent/" + j + '.1.jpg')
       }
+
+      for (var j = 1; j <= 8; j++) {
+        game1bg[j] = loadImage("./assets/pairup/bg" + j + '.jpg')
+      }
+      for (var j = 0; j < 12; j++) {
+        game1img[j] = loadImage("./assets/pairup/" + j + '.jpg')
+      }
+
 
       createCanvas(boardwidth, boardheight);
     }
@@ -128,7 +208,16 @@
     }
 
     function drawgame1() {
-
+      if (game1step == 0) {
+        game1step++
+      } else {
+        background(game1bg[game1step])
+        imageMode(CORNER);
+        image(game1img[0], boardwidth / 4 - boardwidth / 6, boardheight / 4);
+        game1img[0].resize(boardwidth / 6, 0)
+        image(game1img[1], boardwidth / 4 * 2 - boardwidth / 6 / 2, boardheight / 4);
+        game1img[1].resize(boardwidth / 6, 0)
+      }
 
     }
 
@@ -169,7 +258,14 @@
         game3img2[game3step].resize(0, boardheight / 2)
 
 
-        circle(boardwidth / 2, boardheight / 2, 200);
+        if (game3showans) {
+          noFill();
+          stroke('rgb(100%,0%,10%)');
+          strokeWeight(10);
+          circle(game3ans[game3step - 1].img1x, game3ans[game3step - 1].img1y, game3ans[game3step - 1].size);
+          circle(game3ans[game3step - 1].img2x, game3ans[game3step - 1].img2y, game3ans[game3step - 1].size);
+        }
+
       }
 
     }
@@ -204,6 +300,7 @@
     function changescene_matching() {
       console.log("game 1");
       nowscene = 'game1'
+      game1step = 0;
     }
 
     function changescene_music() {
@@ -214,22 +311,46 @@
     function changescene_finddifferent() {
       console.log("game 3");
       nowscene = 'game3'
+      game3showans = false
       game3step = 0;
     }
+
+    var game3start = false
 
     function mousePressed(event) {
       if (!event.screenX || !event.screenY)
         return
-      console.log(event.screenX, event.screenY);
+
+      console.log(event.x, event.y)
       if (nowscene == 'game1') {
 
       } else if (nowscene == 'game2') {
 
       } else if (nowscene == 'game3') {
-        console.log(event.screenX - boardwidth / 2)
-        console.log(event.screenY - boardheight / 2)
-
+        if (!game3start) {
+          game3start = true
+          return
+        }
+        if (game3showans) {
+          game3showans = false
+          game3step++
+        } else {
+          if (eucDistance([event.x, event.y], [game3ans[game3step - 1].img1x, game3ans[game3step - 1]
+              .img1y
+            ]) <= game3ans[game3step - 1].size || eucDistance([event.x, event.y], [game3ans[
+              game3step - 1].img2x, game3ans[game3step - 1].img2y]) <= game3ans[game3step - 1].size)
+            game3showans = true
+        }
       }
+    }
+
+
+    function eucDistance(a, b) {
+      return a
+        .map((x, i) => Math.abs(x - b[i]) ** 2) // square the difference
+        .reduce((sum, now) => sum + now) // sum
+        **
+        (1 / 2)
     }
   </script>
 </head>
