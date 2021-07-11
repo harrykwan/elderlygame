@@ -54,6 +54,7 @@
     var game1bg = [],
       game1img = [],
       game1step
+    var game2bg
 
 
     function game3ansinit() {
@@ -142,6 +143,8 @@
         game1img[j] = loadImage("./assets/pairup/" + j + '.jpg')
       }
 
+      game2bg = loadImage("./assets/music/bg.jpg")
+
 
       createCanvas(boardwidth, boardheight);
     }
@@ -217,13 +220,15 @@
         game1img[0].resize(boardwidth / 6, 0)
         image(game1img[1], boardwidth / 4 * 2 - boardwidth / 6 / 2, boardheight / 4);
         game1img[1].resize(boardwidth / 6, 0)
+        image(game1img[1], boardwidth / 4 * 2 - boardwidth / 6 / 2, boardheight / 4);
+        game1img[1].resize(boardwidth / 6, 0)
       }
 
     }
 
     function drawgame2() {
 
-
+      background(game2bg)
     }
 
 
@@ -250,12 +255,13 @@
         //   0
         // );
         // game3img1.size(boardwidth, boardheight / 2);
+        const imgheight = boardheight / 2
         imageMode(CENTER);
         image(game3img1[game3step], boardwidth / 2, boardheight / 4);
-        game3img1[game3step].resize(0, boardheight / 2)
-        imageMode(CENTER);
+        game3img1[game3step].resize(0, imgheight)
+        // imageMode(CENTER);
         image(game3img2[game3step], boardwidth / 2, boardheight / 4 * 3);
-        game3img2[game3step].resize(0, boardheight / 2)
+        game3img2[game3step].resize(0, imgheight)
 
 
         if (game3showans) {
