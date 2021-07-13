@@ -54,7 +54,9 @@
     var game1bg = [],
       game1img = [],
       game1step
-    var game2bg
+    var game2bg,
+      game2img = [],
+      game2step;
 
 
     function game3ansinit() {
@@ -145,6 +147,9 @@
 
       game2bg = loadImage("./assets/music/bg.jpg")
 
+      for (var j = 1; j <= 4; j++) {
+        game2img[j] = loadImage("./assets/music/food" + j + '.jpg')
+      }
 
       createCanvas(boardwidth, boardheight);
     }
@@ -226,9 +231,24 @@
 
     }
 
-    function drawgame2() {
 
+
+    var game2timer, game2tick = 0,
+      game2waittime = 3
+
+    function drawgame2() {
       background(game2bg)
+      // console.log(parseInt((game2tick) / game2waittime) + 1)
+
+      if (game2tick > (game2step + 1) * game2waittime - 1) {
+        clearInterval(game2timer)
+      } else {
+
+        image(game2img[parseInt((game2tick) / game2waittime) + 1], boardwidth / 4 - boardwidth / 6, boardheight / 4);
+        game1img[0].resize(boardwidth / 6, 0)
+      }
+
+
     }
 
 
@@ -312,6 +332,13 @@
     function changescene_music() {
       console.log("game 2");
       nowscene = 'game2'
+      game2tick = 0
+      game2step = 1
+      game2timer =
+        setInterval(function () {
+          game2tick++
+          console.log(game2tick)
+        }, 1000);
     }
 
     function changescene_finddifferent() {
