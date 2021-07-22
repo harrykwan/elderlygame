@@ -1,550 +1,606 @@
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        background: black;
+      }
+    </style>
 
-<head>
-  <meta charset="utf-8" />
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-      background: black;
-    }
-  </style>
+    <script>
+      function getfulldate() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, "0");
+        var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+        var yyyy = today.getFullYear();
 
-
-  <script>
-    function getfulldate() {
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, '0');
-      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-      var yyyy = today.getFullYear();
-
-      today = yyyy + '/' + mm + '/' + dd;
-      return today
-    }
-
-
-    var myweathericonurl
-
-    function reqListener() {
-      var myresult = JSON.parse(this.responseText)
-      // console.log(myresult.icon);
-      myweathericonurl = myresult.icon[0]
-    }
-
-    function getweather() {
-      var oReq = new XMLHttpRequest();
-      oReq.addEventListener("load", reqListener);
-      oReq.open("GET", "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc");
-      oReq.send();
-    }
-
-    getweather()
-  </script>
-
-  <script>
-    var menubg;
-    const boardwidth = window.innerWidth;
-    const boardheight = window.innerHeight;
-    var menubutton1, menubutton2, menubutton3, weathericon
-
-    var game3step, game3img1 = [],
-      game3img2 = [],
-      game3showans = false,
-      game3ans = []
-    var game1bg = [],
-      game1img = [],
-      game1step,
-      game1ans = []
-    var game2bg,
-      game2img = [],
-      game2step,
-      game2ans = [];
-
-
-    function game3ansinit() {
-      game3ans.push({
-        img1x: boardwidth / 2 - 50,
-        img1y: boardheight / 4 + 50,
-        img2x: boardwidth / 2 - 50,
-        img2y: boardheight / 4 * 3 + 50,
-        size: 300
-      })
-      game3ans.push({
-        img1x: boardwidth / 2,
-        img1y: boardheight / 4 + 200,
-        img2x: boardwidth / 2,
-        img2y: boardheight / 4 * 3 + 200,
-        size: 300
-      })
-      game3ans.push({
-        img1x: boardwidth / 2 + 200,
-        img1y: boardheight / 4 + 200,
-        img2x: boardwidth / 2 + 200,
-        img2y: boardheight / 4 * 3 + 200,
-        size: 800
-      })
-      game3ans.push({
-        img1x: boardwidth / 2 + 200,
-        img1y: boardheight / 4 - 200,
-        img2x: boardwidth / 2 + 200,
-        img2y: boardheight / 4 * 3 - 200,
-        size: 400
-      })
-      game3ans.push({
-        img1x: boardwidth / 2 + 250,
-        img1y: boardheight / 4 - 200,
-        img2x: boardwidth / 2 + 250,
-        img2y: boardheight / 4 * 3 - 200,
-        size: 600
-      })
-      game3ans.push({
-        img1x: boardwidth / 2 + 50,
-        img1y: boardheight / 4 + 50,
-        img2x: boardwidth / 2 + 50,
-        img2y: boardheight / 4 * 3 + 50,
-        size: 600
-      })
-      game3ans.push({
-        img1x: boardwidth / 2 + 50,
-        img1y: boardheight / 4 + 50,
-        img2x: boardwidth / 2 + 50,
-        img2y: boardheight / 4 * 3 + 50,
-        size: 600
-      })
-      game3ans.push({
-        img1x: boardwidth / 2 + 100,
-        img1y: boardheight / 4,
-        img2x: boardwidth / 2 + 100,
-        img2y: boardheight / 4 * 3,
-        size: 300
-      })
-      game3ans.push({
-        img1x: boardwidth / 2,
-        img1y: boardheight / 4 - 50,
-        img2x: boardwidth / 2,
-        img2y: boardheight / 4 * 3 - 50,
-        size: 400
-      })
-    }
-    game3ansinit()
-
-    var nowscene = 'menu'
-
-    function setup() {
-      //menuimg
-      menubg = loadImage("./assets/menu/bg.png");
-
-
-      for (var j = 1; j <= 9; j++) {
-        game3img1[j] = loadImage("./assets/finddifferent/" + j + '.jpg')
-        game3img2[j] = loadImage("./assets/finddifferent/" + j + '.1.jpg')
+        today = yyyy + "/" + mm + "/" + dd;
+        return today;
       }
 
-      for (var j = 1; j <= 8; j++) {
-        game1bg[j] = loadImage("./assets/pairup/bg" + j + '.jpg')
-      }
-      for (var j = 0; j < 12; j++) {
-        game1img[j] = loadImage("./assets/pairup/" + j + '.jpg')
-      }
+      var myweathericonurl;
 
-      game2bg = loadImage("./assets/music/bg.jpg")
-
-      for (var j = 1; j <= 4; j++) {
-        game2img[j] = loadImage("./assets/music/food" + j + '.jpg')
+      function reqListener() {
+        var myresult = JSON.parse(this.responseText);
+        // console.log(myresult.icon);
+        myweathericonurl = myresult.icon[0];
       }
 
-      createCanvas(boardwidth, boardheight);
-    }
-
-    function drawmenu() {
-
-      var topbarheight = 400;
-      var menubuttonwidth = 700;
-      var menubuttonheight = 300;
-
-
-      if (boardwidth > 500) {
-        topbarheight = 200;
-        menubuttonwidth = 600;
-        menubuttonheight = 200;
+      function getweather() {
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open(
+          "GET",
+          "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc"
+        );
+        oReq.send();
       }
-      background(menubg);
 
-      //button1
-      menubutton1 = createImg("./assets/menu/matching.png");
-      menubutton1.position(
-        boardwidth / 2 - menubuttonwidth / 2,
-        (boardheight / 4) * 1 - menubuttonheight / 2 + topbarheight
-      );
-      menubutton1.size(menubuttonwidth, menubuttonheight);
-      menubutton1.mousePressed(changescene_matching);
+      getweather();
+    </script>
 
-      //button2
-      menubutton2 = createImg("./assets/menu/music.png");
-      menubutton2.position(
-        boardwidth / 2 - menubuttonwidth / 2,
-        (boardheight / 5) * 2 - menubuttonheight / 2 + topbarheight
-      );
-      menubutton2.size(menubuttonwidth + 70, menubuttonheight + 70);
-      menubutton2.mousePressed(changescene_music);
+    <script>
+      var menubg;
+      const boardwidth = window.innerWidth;
+      const boardheight = window.innerHeight;
+      var menubutton1, menubutton2, menubutton3, weathericon;
 
-      //button3
-      menubutton3 = createImg("./assets/menu/finddifferent.png");
-      menubutton3.position(
-        boardwidth / 2 - menubuttonwidth / 2,
-        (boardheight / 5) * 3 - menubuttonheight / 2 + topbarheight + 70
-      );
-      menubutton3.size(menubuttonwidth, menubuttonheight);
-      menubutton3.mousePressed(changescene_finddifferent);
+      var game3step,
+        game3img1 = [],
+        game3img2 = [],
+        game3showans = false,
+        game3ans = [];
+      var game1bg = [],
+        game1img = [],
+        game1step,
+        game1ans = [],
+        game1waittime = 2000;
+      var game2bg,
+        game2img = [],
+        game2step,
+        game2ans = [];
 
-      //sperate line
-      strokeWeight(20);
-      stroke(51);
-      rect(0, boardheight / 5, boardwidth, 0);
+      function game3ansinit() {
+        game3ans.push({
+          img1x: boardwidth / 2 - 50,
+          img1y: boardheight / 4 + 50,
+          img2x: boardwidth / 2 - 50,
+          img2y: (boardheight / 4) * 3 + 50,
+          size: 300,
+        });
+        game3ans.push({
+          img1x: boardwidth / 2,
+          img1y: boardheight / 4 + 200,
+          img2x: boardwidth / 2,
+          img2y: (boardheight / 4) * 3 + 200,
+          size: 300,
+        });
+        game3ans.push({
+          img1x: boardwidth / 2 + 200,
+          img1y: boardheight / 4 + 200,
+          img2x: boardwidth / 2 + 200,
+          img2y: (boardheight / 4) * 3 + 200,
+          size: 800,
+        });
+        game3ans.push({
+          img1x: boardwidth / 2 + 200,
+          img1y: boardheight / 4 - 200,
+          img2x: boardwidth / 2 + 200,
+          img2y: (boardheight / 4) * 3 - 200,
+          size: 400,
+        });
+        game3ans.push({
+          img1x: boardwidth / 2 + 250,
+          img1y: boardheight / 4 - 200,
+          img2x: boardwidth / 2 + 250,
+          img2y: (boardheight / 4) * 3 - 200,
+          size: 600,
+        });
+        game3ans.push({
+          img1x: boardwidth / 2 + 50,
+          img1y: boardheight / 4 + 50,
+          img2x: boardwidth / 2 + 50,
+          img2y: (boardheight / 4) * 3 + 50,
+          size: 600,
+        });
+        game3ans.push({
+          img1x: boardwidth / 2 + 50,
+          img1y: boardheight / 4 + 50,
+          img2x: boardwidth / 2 + 50,
+          img2y: (boardheight / 4) * 3 + 50,
+          size: 600,
+        });
+        game3ans.push({
+          img1x: boardwidth / 2 + 100,
+          img1y: boardheight / 4,
+          img2x: boardwidth / 2 + 100,
+          img2y: (boardheight / 4) * 3,
+          size: 300,
+        });
+        game3ans.push({
+          img1x: boardwidth / 2,
+          img1y: boardheight / 4 - 50,
+          img2x: boardwidth / 2,
+          img2y: (boardheight / 4) * 3 - 50,
+          size: 400,
+        });
+      }
+      game3ansinit();
 
-      //top bar date
-      fill(0).strokeWeight(5);
-      textSize(100);
-      textAlign(LEFT, CENTER);
-      text(getfulldate(), 60, 150);
+      var nowscene = "menu";
 
-      //weather icon
-      weathericon = createImg("https://www.hko.gov.hk/images/HKOWxIconOutline/pic" + myweathericonurl + ".png");
-      weathericon.position(
-        boardwidth - 250,
-        80
-      );
-      weathericon.size(150, 150);
-    }
+      function setup() {
+        //menuimg
+        menubg = loadImage("./assets/menu/bg.png");
 
-
-    var game1showans = []
-
-    function drawgame1() {
-      if (game1step == 0) {
-        game1step++
-      } else {
-        background(game1bg[game1step])
-        imageMode(CORNER);
-
-
-        if (game1ans.length == 0) {
-
-          var photonum = 3;
-          if (game1step == 1) {
-            photonum = 3
-          }
-
-          for (var k = 0; k < 2; k++) {
-            for (var j = 1; j <= photonum; j++) {
-              game1ans.push(j)
-            }
-          }
-
-          console.log(game1ans)
-          game1ans.sort(function randomsort(a, b) {
-            return Math.random() - 0.49
-          })
-
-          for (var j = 0; j < photonum * 2; j++) {
-            game1showans[j] = true
-          }
+        for (var j = 1; j <= 9; j++) {
+          game3img1[j] = loadImage("./assets/finddifferent/" + j + ".jpg");
+          game3img2[j] = loadImage("./assets/finddifferent/" + j + ".1.jpg");
         }
 
+        for (var j = 1; j <= 8; j++) {
+          game1bg[j] = loadImage("./assets/pairup/bg" + j + ".jpg");
+        }
+        for (var j = 0; j < 12; j++) {
+          game1img[j] = loadImage("./assets/pairup/" + j + ".jpg");
+        }
+
+        game2bg = loadImage("./assets/music/bg.jpg");
+
+        for (var j = 1; j <= 4; j++) {
+          game2img[j] = loadImage("./assets/music/food" + j + ".jpg");
+        }
+
+        createCanvas(boardwidth, boardheight);
+      }
+
+      function drawmenu() {
+        var topbarheight = 400;
+        var menubuttonwidth = 700;
+        var menubuttonheight = 300;
+
+        if (boardwidth > 500) {
+          topbarheight = 200;
+          menubuttonwidth = 600;
+          menubuttonheight = 200;
+        }
+        background(menubg);
+
+        //button1
+        menubutton1 = createImg("./assets/menu/matching.png");
+        menubutton1.position(
+          boardwidth / 2 - menubuttonwidth / 2,
+          (boardheight / 4) * 1 - menubuttonheight / 2 + topbarheight
+        );
+        menubutton1.size(menubuttonwidth, menubuttonheight);
+        menubutton1.mousePressed(changescene_matching);
+
+        //button2
+        menubutton2 = createImg("./assets/menu/music.png");
+        menubutton2.position(
+          boardwidth / 2 - menubuttonwidth / 2,
+          (boardheight / 5) * 2 - menubuttonheight / 2 + topbarheight
+        );
+        menubutton2.size(menubuttonwidth + 70, menubuttonheight + 70);
+        menubutton2.mousePressed(changescene_music);
+
+        //button3
+        menubutton3 = createImg("./assets/menu/finddifferent.png");
+        menubutton3.position(
+          boardwidth / 2 - menubuttonwidth / 2,
+          (boardheight / 5) * 3 - menubuttonheight / 2 + topbarheight + 70
+        );
+        menubutton3.size(menubuttonwidth, menubuttonheight);
+        menubutton3.mousePressed(changescene_finddifferent);
+
+        //sperate line
+        strokeWeight(20);
+        stroke(51);
+        rect(0, boardheight / 5, boardwidth, 0);
+
+        //top bar date
+        fill(0).strokeWeight(5);
+        textSize(100);
+        textAlign(LEFT, CENTER);
+        text(getfulldate(), 60, 150);
+
+        //weather icon
+        weathericon = createImg(
+          "https://www.hko.gov.hk/images/HKOWxIconOutline/pic" +
+            myweathericonurl +
+            ".png"
+        );
+        weathericon.position(boardwidth - 250, 80);
+        weathericon.size(150, 150);
+      }
+
+      var game1showans = [];
+
+      function game1board1(game1showans) {
         if (game1showans[0]) {
-          game1img[game1ans[0]].resize(boardwidth / 6, 0)
-          image(game1img[game1ans[0]], boardwidth / 4 - boardwidth / 6, boardheight / 4);
+          game1img[game1ans[0]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[0]],
+            boardwidth / 4 - boardwidth / 6,
+            boardheight / 4
+          );
         }
 
         if (game1showans[1]) {
-          game1img[game1ans[1]].resize(boardwidth / 6, 0)
-          image(game1img[game1ans[1]], boardwidth / 4 * 2 - boardwidth / 6 / 2, boardheight / 4);
+          game1img[game1ans[1]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[1]],
+            (boardwidth / 4) * 2 - boardwidth / 6 / 2,
+            boardheight / 4
+          );
         }
 
         if (game1showans[2]) {
-          game1img[game1ans[2]].resize(boardwidth / 6, 0)
-          image(game1img[game1ans[2]], boardwidth - boardwidth / 4, boardheight / 4);
+          game1img[game1ans[2]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[2]],
+            boardwidth - boardwidth / 4,
+            boardheight / 4
+          );
         }
 
         if (game1showans[3]) {
-          game1img[game1ans[3]].resize(boardwidth / 6, 0)
-          image(game1img[game1ans[3]], boardwidth / 4 - boardwidth / 6, boardheight / 4 * 2);
+          game1img[game1ans[3]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[3]],
+            boardwidth / 4 - boardwidth / 6,
+            (boardheight / 4) * 2
+          );
         }
         if (game1showans[4]) {
-          game1img[game1ans[4]].resize(boardwidth / 6, 0)
-          image(game1img[game1ans[4]], boardwidth / 4 * 2 - boardwidth / 6 / 2, boardheight / 4 * 2);
-
+          game1img[game1ans[4]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[4]],
+            (boardwidth / 4) * 2 - boardwidth / 6 / 2,
+            (boardheight / 4) * 2
+          );
         }
         if (game1showans[5]) {
-          game1img[game1ans[5]].resize(boardwidth / 6, 0)
-          image(game1img[game1ans[5]], boardwidth - boardwidth / 4, boardheight / 4 * 2);
+          game1img[game1ans[5]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[5]],
+            boardwidth - boardwidth / 4,
+            (boardheight / 4) * 2
+          );
         }
-
       }
 
-    }
-
-
-
-    function gengame2ans() {
-      if (game2ans.length > 0) {
-        var tempans = parseInt(Math.random() * 4 + 1)
-        while (tempans == game2ans[game2ans.length - 1]) {
-          tempans = parseInt(Math.random() * 4 + 1)
-        }
-        return tempans
-      } else {
-        return parseInt(Math.random() * 4 + 1)
-      }
-    }
-
-    var game2timer, game2tick = 0,
-      game2waittime = 3,
-      game2start = 0,
-      game2getuserans = 0;
-
-    function drawgame2() {
-      background(game2bg)
-      // console.log(parseInt((game2tick) / game2waittime) + 1)
-      if (game2start) {
-        if (game2tick >= (game2step) * game2waittime) {
-          clearInterval(game2timer)
-          game2getuserans = 1
+      function drawgame1() {
+        if (game1step == 0) {
+          game1step++;
         } else {
+          background(game1bg[game1step]);
+          imageMode(CORNER);
 
-          game2img[game2ans[parseInt((game2tick) / game2waittime)]].resize(boardwidth / 4, 0)
-          image(game2img[game2ans[parseInt((game2tick) / game2waittime)]], boardwidth / 2 - boardwidth / 8,
-            boardheight / 4);
+          if (game1ans.length == 0) {
+            var photonum = 3;
+            if (game1step == 1) {
+              photonum = 3;
+            }
 
-        }
-      }
+            for (var k = 0; k < 2; k++) {
+              for (var j = 1; j <= photonum; j++) {
+                game1ans.push(j);
+              }
+            }
 
+            console.log(game1ans);
+            game1ans.sort(function randomsort(a, b) {
+              return Math.random() - 0.49;
+            });
 
-
-    }
-
-
-    function drawgame3() {
-
-
-      background(color(242, 232, 203))
-
-
-      if (game3step == 0) {
-        //game instruction
-        // const instructionwords = `遊戲玩法
-        // 考考你眼力！
-        // 圈出2幅圖的不同之處`
-        // fill(0).strokeWeight(5);
-        // textSize(100);
-        // textAlign(LEFT, CENTER);
-        // text(instructionwords, 60, 150);
-        game3step++
-      } else {
-        // game3img1 = createImg("./assets/finddifferent/" + game3step + '.jpg');
-        // game3img1.position(
-        //   0,
-        //   0
-        // );
-        // game3img1.size(boardwidth, boardheight / 2);
-        const imgheight = boardheight / 2
-        imageMode(CENTER);
-        image(game3img1[game3step], boardwidth / 2, boardheight / 4);
-        game3img1[game3step].resize(0, imgheight)
-        // imageMode(CENTER);
-        image(game3img2[game3step], boardwidth / 2, boardheight / 4 * 3);
-        game3img2[game3step].resize(0, imgheight)
-
-
-        if (game3showans) {
-          noFill();
-          stroke('rgb(100%,0%,10%)');
-          strokeWeight(10);
-          circle(game3ans[game3step - 1].img1x, game3ans[game3step - 1].img1y, game3ans[game3step - 1].size);
-          circle(game3ans[game3step - 1].img2x, game3ans[game3step - 1].img2y, game3ans[game3step - 1].size);
-        }
-
-      }
-
-    }
-
-    function draw() {
-      clearmenuscenebutton()
-      clear()
-      if (nowscene == 'menu')
-        drawmenu();
-      else if (nowscene == 'game1')
-        drawgame1()
-      else if (nowscene == 'game2')
-        drawgame2()
-      else if (nowscene == 'game3')
-        drawgame3()
-
-
-    }
-
-    function clearmenuscenebutton() {
-      if (menubutton1)
-        menubutton1.remove()
-      if (menubutton2)
-        menubutton2.remove()
-      if (menubutton3)
-        menubutton3.remove()
-      if (weathericon)
-        weathericon.remove()
-    }
-
-
-    function changescene_matching() {
-      console.log("game 1");
-      nowscene = 'game1'
-      game1step = 0;
-    }
-
-    function changescene_music() {
-      console.log("game 2");
-      nowscene = 'game2'
-      game2tick = 0
-      game2step = 1
-      game2getuserans = 0
-      for (var j = 0; j < game2step; j++) {
-        const newans = gengame2ans()
-        game2ans.push(newans)
-      }
-      setTimeout(() => {
-        game2start = 1
-        game2timer =
-          setInterval(function () {
-            game2tick++
-            console.log(game2tick)
-          }, 1000);
-      }, 2000);
-
-    }
-
-    function changescene_finddifferent() {
-      console.log("game 3");
-      nowscene = 'game3'
-      game3showans = false
-      game3step = 0;
-    }
-
-    var game3start = false
-
-
-    function checkgame2ans(ans) {
-      const correctans = game2ans.shift()
-      if (correctans == ans) {
-        console.log('correct')
-        if (game2ans.length == 0) {
-          console.log('all correct')
-          alert('全對，下一關')
-          game2step++
-          for (var j = 0; j < game2step; j++) {
-            const newans = gengame2ans()
-            game2ans.push(newans)
-          }
-
-          game2tick = 0
-          game2getuserans = 0
-          game2waittime = 3
-          game2start = 0
-          game2getuserans = 0
-          setTimeout(() => {
-            game2start = 1
-            game2timer =
-              setInterval(function () {
-                game2tick++
-                console.log(game2tick)
-              }, 1000);
-          }, 2000);
-
-        }
-      } else {
-        console.log('wrong')
-        alert("答錯了，再來一次")
-        game2tick = 0
-        game2step = 1
-        game2getuserans = 0
-        game2waittime = 3
-        game2start = 0
-        game2getuserans = 0
-        game2ans = []
-        setTimeout(() => {
-          game2start = 1
-          game2timer =
-            setInterval(function () {
-              game2tick++
-              console.log(game2tick)
-            }, 1000);
-        }, 2000);
-
-
-        for (var j = 0; j < game2step; j++) {
-          const newans = gengame2ans()
-          game2ans.push(newans)
-        }
-      }
-    }
-
-    function mousePressed(event) {
-      if (!event.screenX || !event.screenY)
-        return
-
-      console.log(event.x, event.y)
-      if (nowscene == 'game1') {
-
-      } else if (nowscene == 'game2') {
-        if (game2getuserans) {
-          if (event.y > boardheight / 2) {
-            if (event.x < boardwidth / 3) {
-              console.log('left')
-              checkgame2ans(1)
-            } else if (event.x > boardwidth / 3 * 2) {
-              console.log('right')
-              checkgame2ans(3)
-            } else if (event.y > boardheight / 4 + boardheight / 2) {
-              console.log('down')
-              checkgame2ans(2)
-            } else if (event.y < boardheight / 4 + boardheight / 2) {
-              console.log('up')
-              checkgame2ans(4)
+            for (var j = 0; j < photonum * 2; j++) {
+              game1showans[j] = false;
             }
           }
-        }
 
-      } else if (nowscene == 'game3') {
-        if (!game3start) {
-          game3start = true
-          return
-        }
-        if (game3showans) {
-          game3showans = false
-          game3step++
-        } else {
-          if (eucDistance([event.x, event.y], [game3ans[game3step - 1].img1x, game3ans[game3step - 1]
-              .img1y
-            ]) <= game3ans[game3step - 1].size || eucDistance([event.x, event.y], [game3ans[
-              game3step - 1].img2x, game3ans[game3step - 1].img2y]) <= game3ans[game3step - 1].size)
-            game3showans = true
+          if (game1step == 1) {
+            game1board1(game1showans);
+          }
         }
       }
-    }
 
+      function gengame2ans() {
+        if (game2ans.length > 0) {
+          var tempans = parseInt(Math.random() * 4 + 1);
+          while (tempans == game2ans[game2ans.length - 1]) {
+            tempans = parseInt(Math.random() * 4 + 1);
+          }
+          return tempans;
+        } else {
+          return parseInt(Math.random() * 4 + 1);
+        }
+      }
 
-    function eucDistance(a, b) {
-      return a
-        .map((x, i) => Math.abs(x - b[i]) ** 2) // square the difference
-        .reduce((sum, now) => sum + now) // sum
-        **
-        (1 / 2)
-    }
-  </script>
-</head>
+      var game2timer,
+        game2tick = 0,
+        game2waittime = 3,
+        game2start = 0,
+        game2getuserans = 0;
 
-<body>
-  <main></main>
-</body>
+      function drawgame2() {
+        background(game2bg);
+        // console.log(parseInt((game2tick) / game2waittime) + 1)
+        if (game2start) {
+          if (game2tick >= game2step * game2waittime) {
+            clearInterval(game2timer);
+            game2getuserans = 1;
+          } else {
+            game2img[game2ans[parseInt(game2tick / game2waittime)]].resize(
+              boardwidth / 4,
+              0
+            );
+            image(
+              game2img[game2ans[parseInt(game2tick / game2waittime)]],
+              boardwidth / 2 - boardwidth / 8,
+              boardheight / 4
+            );
+          }
+        }
+      }
 
+      function drawgame3() {
+        background(color(242, 232, 203));
+
+        if (game3step == 0) {
+          //game instruction
+          // const instructionwords = `遊戲玩法
+          // 考考你眼力！
+          // 圈出2幅圖的不同之處`
+          // fill(0).strokeWeight(5);
+          // textSize(100);
+          // textAlign(LEFT, CENTER);
+          // text(instructionwords, 60, 150);
+          game3step++;
+        } else {
+          // game3img1 = createImg("./assets/finddifferent/" + game3step + '.jpg');
+          // game3img1.position(
+          //   0,
+          //   0
+          // );
+          // game3img1.size(boardwidth, boardheight / 2);
+          const imgheight = boardheight / 2;
+          imageMode(CENTER);
+          image(game3img1[game3step], boardwidth / 2, boardheight / 4);
+          game3img1[game3step].resize(0, imgheight);
+          // imageMode(CENTER);
+          image(game3img2[game3step], boardwidth / 2, (boardheight / 4) * 3);
+          game3img2[game3step].resize(0, imgheight);
+
+          if (game3showans) {
+            noFill();
+            stroke("rgb(100%,0%,10%)");
+            strokeWeight(10);
+            circle(
+              game3ans[game3step - 1].img1x,
+              game3ans[game3step - 1].img1y,
+              game3ans[game3step - 1].size
+            );
+            circle(
+              game3ans[game3step - 1].img2x,
+              game3ans[game3step - 1].img2y,
+              game3ans[game3step - 1].size
+            );
+          }
+        }
+      }
+
+      function draw() {
+        clearmenuscenebutton();
+        clear();
+        if (nowscene == "menu") drawmenu();
+        else if (nowscene == "game1") drawgame1();
+        else if (nowscene == "game2") drawgame2();
+        else if (nowscene == "game3") drawgame3();
+      }
+
+      function clearmenuscenebutton() {
+        if (menubutton1) menubutton1.remove();
+        if (menubutton2) menubutton2.remove();
+        if (menubutton3) menubutton3.remove();
+        if (weathericon) weathericon.remove();
+      }
+
+      function changescene_matching() {
+        console.log("game 1");
+        nowscene = "game1";
+        game1step = 0;
+      }
+
+      function changescene_music() {
+        console.log("game 2");
+        nowscene = "game2";
+        game2tick = 0;
+        game2step = 1;
+        game2getuserans = 0;
+        for (var j = 0; j < game2step; j++) {
+          const newans = gengame2ans();
+          game2ans.push(newans);
+        }
+        setTimeout(() => {
+          game2start = 1;
+          game2timer = setInterval(function () {
+            game2tick++;
+            console.log(game2tick);
+          }, 1000);
+        }, 2000);
+      }
+
+      function changescene_finddifferent() {
+        console.log("game 3");
+        nowscene = "game3";
+        game3showans = false;
+        game3step = 0;
+      }
+
+      var game3start = false;
+
+      function checkgame2ans(ans) {
+        const correctans = game2ans.shift();
+        if (correctans == ans) {
+          console.log("correct");
+          if (game2ans.length == 0) {
+            console.log("all correct");
+            alert("全對，下一關");
+            game2step++;
+            for (var j = 0; j < game2step; j++) {
+              const newans = gengame2ans();
+              game2ans.push(newans);
+            }
+
+            game2tick = 0;
+            game2getuserans = 0;
+            game2waittime = 3;
+            game2start = 0;
+            game2getuserans = 0;
+            setTimeout(() => {
+              game2start = 1;
+              game2timer = setInterval(function () {
+                game2tick++;
+                console.log(game2tick);
+              }, 1000);
+            }, 2000);
+          }
+        } else {
+          console.log("wrong");
+          alert("答錯了，再來一次");
+          game2tick = 0;
+          game2step = 1;
+          game2getuserans = 0;
+          game2waittime = 3;
+          game2start = 0;
+          game2getuserans = 0;
+          game2ans = [];
+          setTimeout(() => {
+            game2start = 1;
+            game2timer = setInterval(function () {
+              game2tick++;
+              console.log(game2tick);
+            }, 1000);
+          }, 2000);
+
+          for (var j = 0; j < game2step; j++) {
+            const newans = gengame2ans();
+            game2ans.push(newans);
+          }
+        }
+      }
+
+      var game1photoopen = [];
+      var game1donephoto = [];
+      function touchStarted(event) {
+        // console.log(event);
+        if (!event.changedTouches) return;
+        const mymousex = event.changedTouches[0].clientX;
+        const mymousey = event.changedTouches[0].clientY;
+        // console.log(mymousex + " " + mymousey);
+        if (nowscene == "game1") {
+          if (!(game1photoopen.length < 2)) return;
+          var gameclickedpicx = -1;
+          var gameclickedpicy = -1;
+          if (mymousex < boardwidth / 3) {
+            console.log("left");
+            gameclickedpicx = 0;
+          } else if (mymousex < (boardwidth / 3) * 2) {
+            console.log("mid");
+            gameclickedpicx = 1;
+          } else {
+            console.log("right");
+            gameclickedpicx = 2;
+          }
+
+          if (mymousey > boardheight / 2) {
+            console.log("bot");
+            gameclickedpicy = 1;
+          } else {
+            console.log("top");
+            gameclickedpicy = 0;
+          }
+          var rownum = 0;
+          if (game1step == 1) {
+            rownum = 3;
+          }
+          const chosenpic = gameclickedpicy * rownum + gameclickedpicx;
+          game1showans[chosenpic] = true;
+          game1photoopen.push(chosenpic);
+          if (game1photoopen.length == 2) {
+            if (game1ans[game1photoopen[0]] == game1ans[game1photoopen[0]]) {
+              game1donephoto.push(game1photoopen.shift());
+              game1donephoto.push(game1photoopen.shift());
+              console.log("correct");
+              return;
+            }
+          }
+
+          console.log("reverse soon");
+          window.setTimeout(function () {
+            if (!game1donephoto.includes(chosenpic)) {
+              game1showans[chosenpic] = false;
+              game1photoopen.shift();
+            }
+          }, game1waittime);
+        } else if (nowscene == "game2") {
+          if (game2getuserans) {
+            if (mymousey > boardheight / 2) {
+              if (mymousex < boardwidth / 3) {
+                console.log("left");
+                checkgame2ans(1);
+              } else if (mymousex > (boardwidth / 3) * 2) {
+                console.log("right");
+                checkgame2ans(3);
+              } else if (mymousey > boardheight / 4 + boardheight / 2) {
+                console.log("down");
+                checkgame2ans(2);
+              } else if (mymousey < boardheight / 4 + boardheight / 2) {
+                console.log("up");
+                checkgame2ans(4);
+              }
+            }
+          }
+        } else if (nowscene == "game3") {
+          if (!game3start) {
+            game3start = true;
+            return;
+          }
+          if (game3showans) {
+            game3showans = false;
+            game3step++;
+          } else {
+            if (
+              eucDistance(
+                [mymousex, mymousey],
+                [game3ans[game3step - 1].img1x, game3ans[game3step - 1].img1y]
+              ) <= game3ans[game3step - 1].size ||
+              eucDistance(
+                [mymousex, mymousey],
+                [game3ans[game3step - 1].img2x, game3ans[game3step - 1].img2y]
+              ) <= game3ans[game3step - 1].size
+            )
+              game3showans = true;
+          }
+        }
+      }
+
+      function eucDistance(a, b) {
+        return (
+          a
+            .map((x, i) => Math.abs(x - b[i]) ** 2) // square the difference
+            .reduce((sum, now) => sum + now) ** // sum
+          (1 / 2)
+        );
+      }
+    </script>
+  </head>
+
+  <body>
+    <main></main>
+  </body>
 </html>
