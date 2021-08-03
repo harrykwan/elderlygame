@@ -536,13 +536,13 @@
             game2getuserans = 1;
           } else {
             game2img[game2ans[parseInt(game2tick / game2waittime)]].resize(
-              boardwidth / 4,
+              boardwidth / 2,
               0
             );
             image(
               game2img[game2ans[parseInt(game2tick / game2waittime)]],
-              boardwidth / 2 - boardwidth / 8,
-              boardheight / 4
+              boardwidth / 2 - boardwidth / 4,
+              boardheight / 5
             );
           }
         }
@@ -677,6 +677,15 @@
         }
 
         musicscene_music1.play();
+        musicscene_music1.addEventListener(
+          "ended",
+          function () {
+            this.currentTime = 0;
+            this.play();
+          },
+          false
+        );
+
         setTimeout(() => {
           game2start = 1;
           game2timer = setInterval(function () {
