@@ -398,20 +398,11 @@
           );
         }
 
-        if (game1showans[6]) {
-          game1img[game1ans[6]].resize(boardwidth / 6, 0);
-          image(
-            game1img[game1ans[6]],
-            (boardwidth / 4) * 2 + boardwidth / 6 / 4,
-            boardheight / 4
-          );
-        }
-
         if (game1showans[2]) {
           game1img[game1ans[2]].resize(boardwidth / 6, 0);
           image(
             game1img[game1ans[2]],
-            boardwidth - boardwidth / 4,
+            (boardwidth / 4) * 2 + boardwidth / 6 / 4,
             boardheight / 4
           );
         }
@@ -420,23 +411,16 @@
           game1img[game1ans[3]].resize(boardwidth / 6, 0);
           image(
             game1img[game1ans[3]],
-            boardwidth / 4 - boardwidth / 6,
-            (boardheight / 4) * 2
+            boardwidth - boardwidth / 4,
+            boardheight / 4
           );
         }
+
         if (game1showans[4]) {
           game1img[game1ans[4]].resize(boardwidth / 6, 0);
           image(
             game1img[game1ans[4]],
-            (boardwidth / 4) * 2 - boardwidth / 6,
-            (boardheight / 4) * 2
-          );
-        }
-        if (game1showans[7]) {
-          game1img[game1ans[7]].resize(boardwidth / 6, 0);
-          image(
-            game1img[game1ans[7]],
-            (boardwidth / 4) * 2 + boardwidth / 6 / 4,
+            boardwidth / 4 - boardwidth / 6,
             (boardheight / 4) * 2
           );
         }
@@ -444,6 +428,22 @@
           game1img[game1ans[5]].resize(boardwidth / 6, 0);
           image(
             game1img[game1ans[5]],
+            (boardwidth / 4) * 2 - boardwidth / 6,
+            (boardheight / 4) * 2
+          );
+        }
+        if (game1showans[6]) {
+          game1img[game1ans[6]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[6]],
+            (boardwidth / 4) * 2 + boardwidth / 6 / 4,
+            (boardheight / 4) * 2
+          );
+        }
+        if (game1showans[7]) {
+          game1img[game1ans[7]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[7]],
             boardwidth - boardwidth / 4,
             (boardheight / 4) * 2
           );
@@ -513,9 +513,23 @@
         game2start = 0,
         game2getuserans = 0;
 
+      var game2showcirclex, game2showcircley;
+
       function drawgame2() {
         background(game2bg);
         // console.log(parseInt((game2tick) / game2waittime) + 1)
+        if (game2showcirclex != -1 && game2showcircley != -1) {
+          noFill();
+          stroke("rgb(100%,0%,10%)");
+          strokeWeight(10);
+          circle(game2showcirclex, game2showcircley, 300);
+        }
+        if (game2showtext) {
+          fill(0).strokeWeight(5);
+          textSize(100);
+          textAlign(LEFT, CENTER);
+          text(game2showtext, 60, boardheight / 2 - 100);
+        }
         if (game2start) {
           if (game2tick >= game2step * game2waittime) {
             clearInterval(game2timer);
@@ -603,6 +617,7 @@
 
         if (nowscene != "menu") {
           drawhomebutton();
+        } else {
           clearInterval(game2timer);
         }
       }
@@ -630,6 +645,9 @@
 
         game2tick = 0;
         game2step = 1;
+        game3start = false;
+        musicscene_music1.pause();
+        musicscene_music1.currentTime = 0;
         clearInterval(game2timer);
       }
 
@@ -646,6 +664,7 @@
         game1step = 0;
       }
 
+      var musicscene_music1 = new Audio("./assets/music/music1.mp3");
       function changescene_music() {
         console.log("game 2");
         nowscene = "game2";
@@ -656,6 +675,8 @@
           const newans = gengame2ans();
           game2ans.push(newans);
         }
+
+        musicscene_music1.play();
         setTimeout(() => {
           game2start = 1;
           game2timer = setInterval(function () {
@@ -673,14 +694,16 @@
       }
 
       var game3start = false;
-
+      var game2showtext = "";
       function checkgame2ans(ans) {
         const correctans = game2ans.shift();
         if (correctans == ans) {
           console.log("correct");
           if (game2ans.length == 0) {
             console.log("all correct");
-            alert("全對，下一關");
+
+            game2showtext = "全對，下一關";
+            cleargame2text(1000);
             game2step++;
             for (var j = 0; j < game2step; j++) {
               const newans = gengame2ans();
@@ -702,7 +725,8 @@
           }
         } else {
           console.log("wrong");
-          alert("答錯了，再來一次");
+          game2showtext = "答錯了，再來一次";
+          cleargame2text(1000);
           game2tick = 0;
           game2step = 1;
           game2getuserans = 0;
@@ -723,6 +747,12 @@
             game2ans.push(newans);
           }
         }
+      }
+
+      function cleargame2text(timetowait) {
+        setTimeout(() => {
+          game2showtext = "";
+        }, timetowait);
       }
 
       var game1photoopen = [];
@@ -770,6 +800,7 @@
               gameclickedpicy = 0;
             }
 
+            console.log(gameclickedpicx + " " + gameclickedpicy);
             rownum = 4;
           } else if (game1step == 3) {
           } else if (game1step == 4) {
@@ -823,16 +854,21 @@
                 console.log("up");
                 checkgame2ans(4);
               }
+              game2showcirclex = mymousex;
+              game2showcircley = mymousey;
+              window.setTimeout(function () {
+                game2showcirclex = -1;
+                game2showcircley = -1;
+              }, 1000);
             }
           }
         } else if (nowscene == "game3") {
           if (!game3start) {
             game3start = true;
+            game3step++;
             return;
           }
-          if (game3step == 0) {
-            game3step++;
-          }
+
           if (game3showans) {
             game3showans = false;
             game3step++;
