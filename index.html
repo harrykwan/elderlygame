@@ -327,20 +327,11 @@
           );
         }
 
-        if (game1showans[6]) {
-          game1img[game1ans[6]].resize(boardwidth / 6, 0);
-          image(
-            game1img[game1ans[6]],
-            (boardwidth / 4) * 2 + boardwidth / 6 / 4,
-            boardheight / 4
-          );
-        }
-
         if (game1showans[2]) {
           game1img[game1ans[2]].resize(boardwidth / 6, 0);
           image(
             game1img[game1ans[2]],
-            boardwidth - boardwidth / 4,
+            (boardwidth / 4) * 2 + boardwidth / 6 / 4,
             boardheight / 4
           );
         }
@@ -349,23 +340,16 @@
           game1img[game1ans[3]].resize(boardwidth / 6, 0);
           image(
             game1img[game1ans[3]],
-            boardwidth / 4 - boardwidth / 6,
-            (boardheight / 4) * 2
+            boardwidth - boardwidth / 4,
+            boardheight / 4
           );
         }
+
         if (game1showans[4]) {
           game1img[game1ans[4]].resize(boardwidth / 6, 0);
           image(
             game1img[game1ans[4]],
-            (boardwidth / 4) * 2 - boardwidth / 6,
-            (boardheight / 4) * 2
-          );
-        }
-        if (game1showans[7]) {
-          game1img[game1ans[7]].resize(boardwidth / 6, 0);
-          image(
-            game1img[game1ans[7]],
-            (boardwidth / 4) * 2 + boardwidth / 6 / 4,
+            boardwidth / 4 - boardwidth / 6,
             (boardheight / 4) * 2
           );
         }
@@ -373,6 +357,22 @@
           game1img[game1ans[5]].resize(boardwidth / 6, 0);
           image(
             game1img[game1ans[5]],
+            (boardwidth / 4) * 2 - boardwidth / 6,
+            (boardheight / 4) * 2
+          );
+        }
+        if (game1showans[6]) {
+          game1img[game1ans[6]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[6]],
+            (boardwidth / 4) * 2 + boardwidth / 6 / 4,
+            (boardheight / 4) * 2
+          );
+        }
+        if (game1showans[7]) {
+          game1img[game1ans[7]].resize(boardwidth / 6, 0);
+          image(
+            game1img[game1ans[7]],
             boardwidth - boardwidth / 4,
             (boardheight / 4) * 2
           );
@@ -795,12 +795,14 @@
             }
             rownum = 3;
           } else if (game1step == 2) {
-            if (mymousex < boardwidth / 3) {
+            if (mymousex < boardwidth / 4) {
               gameclickedpicx = 0;
             } else if (mymousex < (boardwidth / 4) * 2) {
               gameclickedpicx = 1;
-            } else {
+            } else if (mymousex < (boardwidth / 4) * 3) {
               gameclickedpicx = 2;
+            } else {
+              gameclickedpicx = 3;
             }
 
             if (mymousey > boardheight / 2) {
