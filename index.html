@@ -450,6 +450,126 @@
           (boardheight / 4) * 2
         );
       }
+      if (game1showans[8]) {
+        game1img[game1ans[8]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[8]],
+          (boardwidth / 4) * 2 - boardwidth / 6,
+          (boardheight / 4) * 3
+        );
+      }
+      if (game1showans[9]) {
+        game1img[game1ans[9]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[9]],
+          (boardwidth / 4) * 2 + boardwidth / 6 / 4,
+          (boardheight / 4) * 3
+        );
+      }
+    }
+
+    function game1board4(game1showans) {
+      if (game1showans[0]) {
+        game1img[game1ans[0]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[0]],
+          boardwidth / 4 - boardwidth / 6,
+          boardheight / 4
+        );
+      }
+
+      if (game1showans[1]) {
+        game1img[game1ans[1]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[1]],
+          (boardwidth / 4) * 2 - boardwidth / 6,
+          boardheight / 4
+        );
+      }
+
+      if (game1showans[2]) {
+        game1img[game1ans[2]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[2]],
+          (boardwidth / 4) * 2 + boardwidth / 6 / 4,
+          boardheight / 4
+        );
+      }
+
+      if (game1showans[3]) {
+        game1img[game1ans[3]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[3]],
+          boardwidth - boardwidth / 4,
+          boardheight / 4
+        );
+      }
+
+      if (game1showans[4]) {
+        game1img[game1ans[4]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[4]],
+          boardwidth / 4 - boardwidth / 6,
+          (boardheight / 4) * 2
+        );
+      }
+      if (game1showans[5]) {
+        game1img[game1ans[5]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[5]],
+          (boardwidth / 4) * 2 - boardwidth / 6,
+          (boardheight / 4) * 2
+        );
+      }
+      if (game1showans[6]) {
+        game1img[game1ans[6]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[6]],
+          (boardwidth / 4) * 2 + boardwidth / 6 / 4,
+          (boardheight / 4) * 2
+        );
+      }
+      if (game1showans[7]) {
+        game1img[game1ans[7]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[7]],
+          boardwidth - boardwidth / 4,
+          (boardheight / 4) * 2
+        );
+      }
+      if (game1showans[8]) {
+        game1img[game1ans[8]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[8]],
+          boardwidth / 4 - boardwidth / 6,
+          (boardheight / 4) * 3
+        );
+      }
+
+      if (game1showans[9]) {
+        game1img[game1ans[9]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[9]],
+          (boardwidth / 4) * 2 - boardwidth / 6,
+          (boardheight / 4) * 3
+        );
+      }
+      if (game1showans[10]) {
+        game1img[game1ans[10]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[10]],
+          (boardwidth / 4) * 2 + boardwidth / 6 / 4,
+          (boardheight / 4) * 3
+        );
+      }
+      if (game1showans[11]) {
+        game1img[game1ans[11]].resize(boardwidth / 6, 0);
+        image(
+          game1img[game1ans[11]],
+          boardwidth - boardwidth / 4,
+          (boardheight / 4) * 3
+        );
+      }
     }
 
     const debugshowans = [];
@@ -472,6 +592,8 @@
             photonum = 4;
           } else if (game1step == 3) {
             photonum = 5;
+          } else if (game1step == 4) {
+            photonum = 6;
           }
 
           for (var k = 0; k < 2; k++) {
@@ -495,6 +617,8 @@
         } else if (game1step == 2) {
           game1board2(game1showans);
         } else if (game1step == 3) {
+          game1board3(game1showans);
+        } else if (game1step == 4) {
           game1board3(game1showans);
         }
       }
@@ -779,7 +903,8 @@
       if (!event.changedTouches) return;
       const mymousex = event.changedTouches[0].clientX;
       const mymousey = event.changedTouches[0].clientY;
-      // console.log(mymousex + " " + mymousey);
+
+      console.log(mymousex + " " + mymousey);
       if (nowscene == "game1") {
         if (!(game1photoopen.length < 2)) return;
         var gameclickedpicx = -1;
@@ -832,19 +957,44 @@
             gameclickedpicx = 3;
           }
 
-          if (mymousey > boardheight / 2) {
-            gameclickedpicy = 1;
+          if (mymousey < boardheight / 2) {
+            gameclickedpicy = 0;
           } else if (mymousey > boardheight / 3 * 2) {
-            gameclickedpicy = 3;
-          } else {
             gameclickedpicy = 2;
+          } else {
+            gameclickedpicy = 1;
+          }
+
+          if (gameclickedpicy == 2) {
+            gameclickedpicx -= 1
           }
 
           console.log(gameclickedpicx + " " + gameclickedpicy);
           rownum = 4;
 
 
-        } else if (game1step == 4) {} else {
+        } else if (game1step == 4) {
+          if (mymousex < boardwidth / 4) {
+            gameclickedpicx = 0;
+          } else if (mymousex < (boardwidth / 4) * 2) {
+            gameclickedpicx = 1;
+          } else if (mymousex < (boardwidth / 4) * 3) {
+            gameclickedpicx = 2;
+          } else {
+            gameclickedpicx = 3;
+          }
+
+          if (mymousey < boardheight / 2) {
+            gameclickedpicy = 0;
+          } else if (mymousey > boardheight / 3 * 2) {
+            gameclickedpicy = 2;
+          } else {
+            gameclickedpicy = 1;
+          }
+
+          console.log(gameclickedpicx + " " + gameclickedpicy);
+          rownum = 6;
+        } else {
           return;
         }
 
@@ -863,8 +1013,17 @@
             return;
           }
         }
-
-        if (game1donephoto.length == rownum * 2) {
+        var photonum = 3;
+        if (game1step == 1) {
+          photonum = 3;
+        } else if (game1step == 2) {
+          photonum = 4;
+        } else if (game1step == 3) {
+          photonum = 5;
+        } else if (game1step == 4) {
+          photonum = 6;
+        }
+        if (game1donephoto.length == photonum * 2) {
           game1donephoto = [];
           game1step++;
           game1ans = [];
@@ -929,8 +1088,8 @@
     function eucDistance(a, b) {
       return (
         a
-        .map((x, i) => Math.abs(x - b[i]) ** 2) // square the difference
-        .reduce((sum, now) => sum + now) ** // sum
+          .map((x, i) => Math.abs(x - b[i]) ** 2) // square the difference
+          .reduce((sum, now) => sum + now) ** // sum
         (1 / 2)
       );
     }
