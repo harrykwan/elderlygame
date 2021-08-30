@@ -914,6 +914,15 @@
     function drawgame2() {
       background(game2bg);
       // console.log(parseInt((game2tick) / game2waittime) + 1)
+      if (game2getuserans) {
+        strokeWeight(0)
+        fill("rgb(0%,100%,10%)");
+        circle(50, 450, 70);
+      } else {
+        strokeWeight(0)
+        fill("rgb(100%,0%,10%)");
+        circle(50, 450, 70);
+      }
       if (game2showcirclex != -1 && game2showcircley != -1) {
         noFill();
         stroke("rgb(100%,0%,10%)");
@@ -1042,6 +1051,9 @@
       game2tick = 0;
       game2step = 1;
       game3start = false;
+      game2tick = 0
+      game2start = 0
+      game2getuserans = 0;
       // musicscene_music1.pause();
       // musicscene_music1.currentTime = 0;
       clearInterval(game2timer);
@@ -1068,6 +1080,7 @@
       game2tick = 0;
       game2step = 1;
       game2getuserans = 0;
+      game2ans = []
       for (var j = 0; j < game2step; j++) {
         const newans = gengame2ans();
         game2ans.push(newans);
@@ -1118,7 +1131,6 @@
           }
 
           game2tick = 0;
-          game2getuserans = 0;
           game2waittime = 3;
           game2start = 0;
           game2getuserans = 0;
@@ -1139,7 +1151,6 @@
         game2getuserans = 0;
         game2waittime = 3;
         game2start = 0;
-        game2getuserans = 0;
         game2ans = [];
         setTimeout(() => {
           game2start = 1;
@@ -1335,7 +1346,7 @@
         }
         game1showans[chosenpic] = true;
         game1photoopen.push(chosenpic);
-        if (game1photoopen.length == 2) {
+        if (game1photoopen.length >= 2) {
           console.log(game1photoopen);
           if (game1ans[game1photoopen[0]] == game1ans[game1photoopen[1]]) {
             game1donephoto.push(game1photoopen.shift());
@@ -1346,14 +1357,16 @@
 
         if (game1donephoto.length == photonum * 2) {
           game1donephoto = [];
-          game1photoopen = []
-          game1step++;
+          game1photoopen = [];
           game1ans = [];
+          game1step++;
         }
 
         window.setTimeout(function () {
           if (!game1donephoto.includes(chosenpic)) {
             game1showans[chosenpic] = false;
+          }
+          if (game1photoopen.length > 0) {
             game1photoopen.shift();
           }
         }, game1waittime);
@@ -1380,7 +1393,12 @@
               game2showcircley = -1;
             }, 1000);
           }
+        } else {
+
         }
+
+
+
       } else if (nowscene == "game3") {
         if (!game3start) {
           game3start = true;
