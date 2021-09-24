@@ -1054,8 +1054,8 @@
       game2tick = 0
       game2start = 0
       game2getuserans = 0;
-      // musicscene_music1.pause();
-      // musicscene_music1.currentTime = 0;
+      musicscene_music1.pause();
+      musicscene_music1.currentTime = 0;
       clearInterval(game2timer);
     }
 
@@ -1072,7 +1072,7 @@
       game1step = 0;
     }
 
-    // var musicscene_music1 = new Audio("./assets/music/music1.mp3");
+    var musicscene_music1 = new Audio("./assets/music/music1.mp3");
 
     function changescene_music() {
       console.log("game 2");
@@ -1086,15 +1086,15 @@
         game2ans.push(newans);
       }
 
-      // musicscene_music1.play();
-      // musicscene_music1.addEventListener(
-      //   "ended",
-      //   function () {
-      //     this.currentTime = 0;
-      //     this.play();
-      //   },
-      //   false
-      // );
+      musicscene_music1.play();
+      musicscene_music1.addEventListener(
+        "ended",
+        function () {
+          this.currentTime = 0;
+          this.play();
+        },
+        false
+      );
 
       setTimeout(() => {
         game2start = 1;
@@ -1428,8 +1428,8 @@
     function eucDistance(a, b) {
       return (
         a
-        .map((x, i) => Math.abs(x - b[i]) ** 2) // square the difference
-        .reduce((sum, now) => sum + now) ** // sum
+          .map((x, i) => Math.abs(x - b[i]) ** 2) // square the difference
+          .reduce((sum, now) => sum + now) ** // sum
         (1 / 2)
       );
     }
