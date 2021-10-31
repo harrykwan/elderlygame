@@ -161,7 +161,6 @@
       );
     }
 
-
     var nowscene = "menu";
     var game3menu1, game3menu2;
 
@@ -573,7 +572,6 @@
       }
     }
 
-
     function game1board5(game1showans) {
       if (game1showans[0]) {
         game1img[game1ans[0]].resize(boardwidth / 6, 0);
@@ -838,7 +836,13 @@
 
     function drawgame1() {
       if (game1step == 0) {
-        game1step++;
+        background('#af4035');
+        const instructionwords = `考考你記憶
+配對相同的圖案`;
+        fill(0).strokeWeight(5);
+        textSize(80);
+        textAlign(LEFT, CENTER);
+        text(instructionwords, 60, 250);
       } else {
         background(game1bg[game1step]);
         imageMode(CORNER);
@@ -907,48 +911,61 @@
       game2tick = 0,
       game2waittime = 3,
       game2start = 0,
-      game2getuserans = 0;
-
+      game2getuserans = 0,
+      game2step = 0;
     var game2showcirclex, game2showcircley;
 
     function drawgame2() {
       background(game2bg);
-      // console.log(parseInt((game2tick) / game2waittime) + 1)
-      if (game2getuserans) {
-        strokeWeight(0)
-        fill("rgb(0%,100%,10%)");
-        circle(50, 450, 70);
-      } else {
-        strokeWeight(0)
-        fill("rgb(100%,0%,10%)");
-        circle(50, 450, 70);
-      }
-      if (game2showcirclex != -1 && game2showcircley != -1) {
-        noFill();
-        stroke("rgb(100%,0%,10%)");
-        strokeWeight(10);
-        circle(game2showcirclex, game2showcircley, 300);
-      }
-      if (game2showtext) {
-        fill(0).strokeWeight(5);
-        textSize(100);
+
+      if (game2step == 0) {
+        //game instruction
+        const instructionwords = `遊戲玩法:
+記下點心的種類，然後綠色指示燈亮起後，
+在下方點出相應的圖案，點心種類會愈來愈多，
+第一關一個，第二關兩個，如此類推`;
+        fill(0).strokeWeight(4);
+        textSize(45);
         textAlign(LEFT, CENTER);
-        text(game2showtext, 60, boardheight / 2 - 100);
-      }
-      if (game2start) {
-        if (game2tick >= game2step * game2waittime) {
-          clearInterval(game2timer);
-          game2getuserans = 1;
+        text(instructionwords, 50, 550);
+      } else {
+        // console.log(parseInt((game2tick) / game2waittime) + 1)
+        if (game2getuserans) {
+          strokeWeight(0);
+          fill("rgb(0%,100%,10%)");
+          circle(50, 450, 70);
         } else {
-          game2img[game2ans[parseInt(game2tick / game2waittime)]].resize(
-            boardwidth / 2,
-            0
-          );
-          image(
-            game2img[game2ans[parseInt(game2tick / game2waittime)]],
-            boardwidth / 2 - boardwidth / 4,
-            boardheight / 6
-          );
+          strokeWeight(0);
+          fill("rgb(100%,0%,10%)");
+          circle(50, 450, 70);
+        }
+        if (game2showcirclex != -1 && game2showcircley != -1) {
+          noFill();
+          stroke("rgb(100%,0%,10%)");
+          strokeWeight(10);
+          circle(game2showcirclex, game2showcircley, 300);
+        }
+        if (game2showtext) {
+          fill(0).strokeWeight(5);
+          textSize(100);
+          textAlign(LEFT, CENTER);
+          text(game2showtext, 60, boardheight / 2 - 100);
+        }
+        if (game2start) {
+          if (game2tick >= game2step * game2waittime) {
+            clearInterval(game2timer);
+            game2getuserans = 1;
+          } else {
+            game2img[game2ans[parseInt(game2tick / game2waittime)]].resize(
+              boardwidth / 2,
+              0
+            );
+            image(
+              game2img[game2ans[parseInt(game2tick / game2waittime)]],
+              boardwidth / 2 - boardwidth / 4,
+              boardheight / 6
+            );
+          }
         }
       }
     }
@@ -1049,10 +1066,10 @@
       nowscene = "menu";
 
       game2tick = 0;
-      game2step = 1;
+      game2step = 0;
       game3start = false;
-      game2tick = 0
-      game2start = 0
+      game2tick = 0;
+      game2start = 0;
       game2getuserans = 0;
       musicscene_music1.pause();
       musicscene_music1.currentTime = 0;
@@ -1078,31 +1095,10 @@
       console.log("game 2");
       nowscene = "game2";
       game2tick = 0;
-      game2step = 1;
+      game2step = 0;
       game2getuserans = 0;
-      game2ans = []
-      for (var j = 0; j < game2step; j++) {
-        const newans = gengame2ans();
-        game2ans.push(newans);
-      }
+      game2ans = [];
 
-      musicscene_music1.play();
-      musicscene_music1.addEventListener(
-        "ended",
-        function () {
-          this.currentTime = 0;
-          this.play();
-        },
-        false
-      );
-
-      setTimeout(() => {
-        game2start = 1;
-        game2timer = setInterval(function () {
-          game2tick++;
-          console.log(game2tick);
-        }, 1000);
-      }, 2000);
     }
 
     function changescene_finddifferent() {
@@ -1189,7 +1185,10 @@
         var gameclickedpicy = -1;
 
         var rownum = 0;
-        if (game1step == 1) {
+        if (game1step == 0) {
+          game1step++;
+        }
+        else if (game1step == 1) {
           if (mymousex < boardwidth / 3) {
             gameclickedpicx = 0;
           } else if (mymousex < (boardwidth / 3) * 2) {
@@ -1224,7 +1223,6 @@
           console.log(gameclickedpicx + " " + gameclickedpicy);
           rownum = 4;
         } else if (game1step == 3) {
-
           if (mymousex < boardwidth / 4) {
             gameclickedpicx = 0;
           } else if (mymousex < (boardwidth / 4) * 2) {
@@ -1237,20 +1235,18 @@
 
           if (mymousey < boardheight / 2) {
             gameclickedpicy = 0;
-          } else if (mymousey > boardheight / 3 * 2) {
+          } else if (mymousey > (boardheight / 3) * 2) {
             gameclickedpicy = 2;
           } else {
             gameclickedpicy = 1;
           }
 
           if (gameclickedpicy == 2) {
-            gameclickedpicx -= 1
+            gameclickedpicx -= 1;
           }
 
           console.log(gameclickedpicx + " " + gameclickedpicy);
           rownum = 4;
-
-
         } else if (game1step == 4) {
           if (mymousex < boardwidth / 4) {
             gameclickedpicx = 0;
@@ -1264,7 +1260,7 @@
 
           if (mymousey < boardheight / 2) {
             gameclickedpicy = 0;
-          } else if (mymousey > boardheight / 3 * 2) {
+          } else if (mymousey > (boardheight / 3) * 2) {
             gameclickedpicy = 2;
           } else {
             gameclickedpicy = 1;
@@ -1283,18 +1279,18 @@
             gameclickedpicx = 3;
           }
 
-          if (mymousey < boardheight / 5 * 2) {
+          if (mymousey < (boardheight / 5) * 2) {
             gameclickedpicy = 0;
-          } else if (mymousey < boardheight / 5 * 3) {
+          } else if (mymousey < (boardheight / 5) * 3) {
             gameclickedpicy = 1;
-          } else if (mymousey < boardheight / 5 * 4) {
+          } else if (mymousey < (boardheight / 5) * 4) {
             gameclickedpicy = 2;
           } else {
             gameclickedpicy = 3;
           }
 
           if (gameclickedpicy == 3) {
-            gameclickedpicx -= 1
+            gameclickedpicx -= 1;
           }
           console.log(gameclickedpicx + " " + gameclickedpicy);
           rownum = 4;
@@ -1309,16 +1305,15 @@
             gameclickedpicx = 3;
           }
 
-          if (mymousey < boardheight / 5 * 2) {
+          if (mymousey < (boardheight / 5) * 2) {
             gameclickedpicy = 0;
-          } else if (mymousey < boardheight / 5 * 3) {
+          } else if (mymousey < (boardheight / 5) * 3) {
             gameclickedpicy = 1;
-          } else if (mymousey < boardheight / 5 * 4) {
+          } else if (mymousey < (boardheight / 5) * 4) {
             gameclickedpicy = 2;
           } else {
             gameclickedpicy = 3;
           }
-
 
           console.log(gameclickedpicx + " " + gameclickedpicy);
           rownum = 4;
@@ -1371,33 +1366,58 @@
           }
         }, game1waittime);
       } else if (nowscene == "game2") {
-        if (game2getuserans) {
-          if (mymousey > boardheight / 2) {
-            if (mymousex < boardwidth / 3) {
-              console.log("left");
-              checkgame2ans(1);
-            } else if (mymousex > (boardwidth / 3) * 2) {
-              console.log("right");
-              checkgame2ans(3);
-            } else if (mymousey > boardheight / 4 + boardheight / 2) {
-              console.log("down");
-              checkgame2ans(2);
-            } else if (mymousey < boardheight / 4 + boardheight / 2) {
-              console.log("up");
-              checkgame2ans(4);
-            }
-            game2showcirclex = mymousex;
-            game2showcircley = mymousey;
-            window.setTimeout(function () {
-              game2showcirclex = -1;
-              game2showcircley = -1;
-            }, 1000);
+        if (game2step == 0) {
+          game2step = 1
+          game2getuserans = 0;
+          game2ans = [];
+          for (var j = 0; j < game2step; j++) {
+            const newans = gengame2ans();
+            game2ans.push(newans);
           }
+
+          musicscene_music1.play();
+          musicscene_music1.addEventListener(
+            "ended",
+            function () {
+              this.currentTime = 0;
+              this.play();
+            },
+            false
+          );
+
+          setTimeout(() => {
+            game2start = 1;
+            game2timer = setInterval(function () {
+              game2tick++;
+              console.log(game2tick);
+            }, 1000);
+          }, 2000);
         } else {
-
+          if (game2getuserans) {
+            if (mymousey > boardheight / 2) {
+              if (mymousex < boardwidth / 3) {
+                console.log("left");
+                checkgame2ans(1);
+              } else if (mymousex > (boardwidth / 3) * 2) {
+                console.log("right");
+                checkgame2ans(3);
+              } else if (mymousey > boardheight / 4 + boardheight / 2) {
+                console.log("down");
+                checkgame2ans(2);
+              } else if (mymousey < boardheight / 4 + boardheight / 2) {
+                console.log("up");
+                checkgame2ans(4);
+              }
+              game2showcirclex = mymousex;
+              game2showcircley = mymousey;
+              window.setTimeout(function () {
+                game2showcirclex = -1;
+                game2showcircley = -1;
+              }, 1000);
+            }
+          } else {
+          }
         }
-
-
 
       } else if (nowscene == "game3") {
         if (!game3start) {
